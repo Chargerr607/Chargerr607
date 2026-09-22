@@ -1,4 +1,4 @@
-Hi there, I'm Christopher
+# Hi there, I'm Christopher
 echo "Building, breaking, and securing networks & systems."
 
 🛠️ Tech Stack & Tooling
