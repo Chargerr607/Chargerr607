@@ -1,0 +1,26 @@
+name: Update Daily Tech Quote
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  refresh-quote:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch and Update
+        run: |
+          RESPONSE=$(curl -s https://vercel.app)
+          QUOTE=$(echo "$RESPONSE" | jq -r '.text')
+          AUTHOR=$(echo "$RESPONSE" | jq -r '.author')
+          NEW_QUOTE="> \"$QUOTE\" — $AUTHOR"
+          perl -i -0777 -pe "s/(<!-- QUOTE_START -->).*?(<!-- QUOTE_END -->)/\$1\n$NEW_QUOTE\n\$2/s" README.md
+      - name: Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@://github.com"
+          git diff --quiet && git diff --staged --quiet || (git add README.md && git commit -m "ci: update quote" && git push)
