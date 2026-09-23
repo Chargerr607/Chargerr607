@@ -12,13 +12,25 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      
       - name: Fetch and Update
         run: |
-          RESPONSE=$(curl -s https://vercel.app)
-          QUOTE=$(echo "$RESPONSE" | jq -r '.text')
-          AUTHOR=$(echo "$RESPONSE" | jq -r '.author')
+          # Fetch from a reliable public quote API
+          RESPONSE=$(curl -s https://dummyjson.com)
+          
+          # Extract values safely
+          QUOTE=$(echo "$RESPONSE" | jq -r '.quote // empty')
+          AUTHOR=$(echo "$RESPONSE" | jq -r '.author // empty')
+          
+          # Fallback mechanism if the API is down or returns invalid data
+          if [ -z "$QUOTE" ]; then
+            QUOTE="Stay hungry, stay foolish."
+            AUTHOR="Steve Jobs"
+          fi
+          
           NEW_QUOTE="> \"$QUOTE\" — $AUTHOR"
           perl -i -0777 -pe "s/(<!-- QUOTE_START -->).*?(<!-- QUOTE_END -->)/\$1\n$NEW_QUOTE\n\$2/s" README.md
+          
       - name: Push changes
         run: |
           git config --global user.name "github-actions[bot]"
