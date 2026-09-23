@@ -15,24 +15,26 @@ jobs:
       
       - name: Fetch and Update
         run: |
-          # Fetch from a reliable public quote API
-          RESPONSE=$(curl -s https://dummyjson.com)
+          # A pre-defined array of classic programming quotes
+          QUOTES=(
+            "\"Stay hungry, stay foolish.\" — Steve Jobs"
+            "\"Talk is cheap. Show me the code.\" — Linus Torvalds"
+            "\"Programs must be written for people to read, and only incidentally for machines to execute.\" — Harold Abelson"
+            "\"Truth can only be found in one place: the code.\" — Robert C. Martin"
+            "\"Walking on water and developing software from a specification are easy if both are frozen.\" — Edward V. Berard"
+          )
           
-          # Extract values safely
-          QUOTE=$(echo "$RESPONSE" | jq -r '.quote // empty')
-          AUTHOR=$(echo "$RESPONSE" | jq -r '.author // empty')
+          # Pick a random index based on array length
+          RANDOM_INDEX=$(( RANDOM % ${#QUOTES[@]} ))
+          NEW_QUOTE="> ${QUOTES[$RANDOM_INDEX]}"
           
-          # Fallback mechanism if the API is down or returns invalid data
-          if [ -z "$QUOTE" ]; then
-            QUOTE="Stay hungry, stay foolish."
-            AUTHOR="Steve Jobs"
-          fi
+          echo "Selected quote: $NEW_QUOTE"
           
-          NEW_QUOTE="> \"$QUOTE\" — $AUTHOR"
+          # Update the content inside the README.md placeholders safely
           perl -i -0777 -pe "s/(<!-- QUOTE_START -->).*?(<!-- QUOTE_END -->)/\$1\n$NEW_QUOTE\n\$2/s" README.md
           
       - name: Push changes
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@://github.com"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git diff --quiet && git diff --staged --quiet || (git add README.md && git commit -m "ci: update quote" && git push)
