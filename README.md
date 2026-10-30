@@ -13,5 +13,5 @@ echo "Building, breaking, and securing networks & systems."
 * ⚡ Fun Fact: "There is no place like 127.0.0.1."
 ### 💡 Daily Tech Quote
 <!-- QUOTE_START -->
-> "Programs must be written for people to read, and only incidentally for machines to execute." — Harold Abelson
+> "Walking on water and developing software from a specification are easy if both are frozen." — Edward V. Berard
 <!-- QUOTE_END -->
