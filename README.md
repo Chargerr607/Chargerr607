@@ -13,5 +13,5 @@ echo "Building, breaking, and securing networks & systems."
 * ⚡ Fun Fact: "There is no place like 127.0.0.1."
 ### 💡 Daily Tech Quote
 <!-- QUOTE_START -->
-> "Truth can only be found in one place: the code." — Robert C. Martin
+> "Talk is cheap. Show me the code." — Linus Torvalds
 <!-- QUOTE_END -->
